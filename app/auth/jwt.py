@@ -5,16 +5,10 @@ from flask_restful_swagger_2 import swagger, Schema
 
 
 class UserLoginSchema(Schema):
-    type = 'object'
+    type = "object"
     properties = {
-        'username': {
-            'type': 'string',
-            "example": 'admin'
-        },
-        'password': {
-            'type': 'string',
-            "example":'password'
-        }
+        "username": {"type": "string", "example": "admin"},
+        "password": {"type": "string", "example": "password"},
     }
 
 
@@ -32,18 +26,19 @@ def set_jwt_handlers(jwt):
             return user
         return None
 
-    @jwt.error_handler
+    @jwt.jwt_error_handler
     def error_handler(error):
-        return 'Auth Failed: {}'.format(error.description), 400
+        return "Auth Failed: {}".format(error.description), 400
 
-    @jwt.payload_handler
+    @jwt.jwt_payload_handler
     def make_payload(user):
         return {
-            'user_id': str(user.id),
-            'exp': (datetime.datetime.utcnow() +
-                    current_app.config['JWT_EXPIRATION_DELTA']).isoformat()
+            "user_id": str(user.id),
+            "exp": (
+                datetime.datetime.utcnow() + current_app.config["JWT_EXPIRATION_DELTA"]
+            ).isoformat(),
         }
 
-    @jwt.user_handler
+    @jwt.identity_handler
     def load_user(payload):
-        return models.User.query.filter_by(id=payload['user_id']).first()
+        return models.User.query.filter_by(id=payload["user_id"]).first()

@@ -1,5 +1,5 @@
 from flask_restful import Resource, reqparse
-from flask_jwt import jwt_required,current_user
+from flask_jwt import jwt_required#, current_user
 from flask_restful_swagger_2 import swagger, Schema
 from flask import current_app, request
 from app import helpers, extensions, UserLoginSchema
